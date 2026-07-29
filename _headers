@@ -1,0 +1,32 @@
+# ============================================================
+#  Cloudflare Pages — HTTP headers
+#  https://developers.cloudflare.com/pages/configuration/headers/
+# ============================================================
+
+# Security headers on every response
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# HTML: always revalidate so content edits go live immediately
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Images: immutable, cache hard
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS / JS: revalidate daily (no hashed filenames yet)
+/*.css
+  Cache-Control: public, max-age=86400
+/*.js
+  Cache-Control: public, max-age=86400
+
+# Crawler files
+/robots.txt
+  Cache-Control: public, max-age=3600
+/sitemap.xml
+  Cache-Control: public, max-age=3600
