@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+.thumbnail
+
+# Duplicate of the root site files (byte-identical) — build output
+deploy/
+
+# Older exported variant of the site
+export/
+
+# Raw image originals, not referenced anywhere in the site
+uploads/
+
+# Belongs to the Paramus site, not this one
+Elite Spine Paramus.html
+
+# transfer artifact
+esfl-git.tar.gz
