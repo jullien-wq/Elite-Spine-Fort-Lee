@@ -280,6 +280,21 @@
     card.addEventListener("click", function (e) { e.preventDefault(); openByName(name); });
   });
 
+  // Deep link: /conditions-services#neck-pain scrolls to that card and opens it
+  function openFromHash() {
+    var id = (location.hash || "").replace("#", "");
+    if (!id) return;
+    var card = document.getElementById(id);
+    if (!card || !card.classList.contains("ccard")) return;
+    var h3 = card.querySelector("h3");
+    if (!h3) return;
+    var name = h3.textContent.trim();
+    if (!CONDITIONS[name]) return;
+    setTimeout(function () { openByName(name); }, 450);
+  }
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
+
   overlay.querySelector(".cmodal__close").addEventListener("click", closeModal);
   overlay.addEventListener("mousedown", function (e) {
     if (e.target === overlay) closeModal();
