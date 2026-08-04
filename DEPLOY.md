@@ -104,6 +104,15 @@ there are no redirect hops. Nothing to configure.
   `PLACE_ID` in `Code.gs` (Step 8). Until then the static 5.0 shows.
 - **Zocdoc link** still points to the original practice ID — confirm it routes
   to the Fort Lee location.
-- **Image weight**: the photos in `images/` are full-resolution (several MB
-  each). They'll work, but compressing them would noticeably improve load time
-  and Core Web Vitals. Ask and I'll generate optimized versions.
+## Images
+
+`deploy/images/` ships **web-optimized** files only — total **2.6 MB** for the
+whole site (down from ~240 MB of camera originals).
+
+- Condition & treatment cards: 800px wide, ~50–135 KB each
+- Backgrounds (proof, clinic, CTA, heroes): 1200–1600px wide, ~64–265 KB each
+- Below-the-fold `<img>` tags carry `loading="lazy" decoding="async"`
+
+Filenames use the `.jpg` suffix. The full-resolution originals stay in the
+project's root `images/` folder (not deployed) if you ever need to re-crop —
+regenerate optimized versions rather than uploading the originals.

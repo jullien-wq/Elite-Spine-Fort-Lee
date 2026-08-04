@@ -16,3 +16,6 @@ Elite Spine Paramus.html
 
 # transfer artifact
 esfl-git.tar.gz
+
+# Full-size image originals (kept locally, not tracked)
+images-src/
