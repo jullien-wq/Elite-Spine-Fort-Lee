@@ -113,6 +113,6 @@ whole site (down from ~240 MB of camera originals).
 - Backgrounds (proof, clinic, CTA, heroes): 1200–1600px wide, ~64–265 KB each
 - Below-the-fold `<img>` tags carry `loading="lazy" decoding="async"`
 
-Filenames use the `.jpg` suffix. The full-resolution originals stay in the
+Filenames use the `-opt.jpg` suffix. The full-resolution originals stay in the
 project's root `images/` folder (not deployed) if you ever need to re-crop —
 regenerate optimized versions rather than uploading the originals.
