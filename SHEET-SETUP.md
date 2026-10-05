@@ -196,6 +196,60 @@ Google's free quota. If the key/Place ID aren't set, the site keeps the static
 
 ---
 
+## Step 9 — Publish blog posts from the Sheet
+
+The blog is connected to the same spreadsheet: add a row, set it to
+**Published**, and it appears on the site automatically (within ~10 minutes,
+due to caching).
+
+### 9a. Create the tab
+
+In the spreadsheet, add a tab named exactly **Blog Posts** with these headers
+in row 1:
+
+| Slug | Status | Title | Category | Date | Read Time | Hero Image | Excerpt | Body |
+
+### 9b. Write a post (one row per article)
+
+- **Slug** — the URL name, lowercase with hyphens (e.g. `neck-pain-at-work`).
+  The article lives at `/blog-post?post=neck-pain-at-work`.
+- **Status** — `Published` to go live; anything else (e.g. `Draft`) stays hidden.
+- **Title / Category / Date / Read Time / Excerpt** — shown on the card and
+  article header. Date can be a real date cell or text.
+- **Hero Image** — a full image URL (or leave blank for a default clinic photo).
+- **Body** — the article text, in one cell, using this format:
+
+```
+## A Section Heading
+
+A paragraph of text. Keep writing — line breaks within a
+paragraph are fine.
+
+Leave a blank line to start a new paragraph.
+
+- A bullet point
+- Another bullet point
+
+## Next Section
+More text here.
+```
+
+(Tip: press **Ctrl+Enter** / **Cmd+Enter** to add line breaks inside a cell.)
+
+### 9c. How it flows to the site
+
+The blog page fetches the published rows from the Apps Script endpoint
+(`?posts=1`), adds each as a card at the top of the grid, and renders the full
+article. Sheet posts with the same slug as a built-in article override it.
+Posts are cached for 10 minutes (`BLOG_CACHE_MINUTES` in `Code.gs`), so edits
+appear within about 10 minutes.
+
+> After pasting the updated `Code.gs`, remember to **re-deploy a new version**
+> (Deploy → Manage deployments → Edit → New version) or `?posts=1` will return
+> nothing.
+
+---
+
 ## How "one tab per form" works
 
 Each `<form>` in the HTML carries an attribute that names its destination tab:
