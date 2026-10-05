@@ -1,0 +1,11 @@
+{
+  // Static-asset Worker for the Elite Spine Fort Lee site.
+  // Cloudflare Workers Builds runs `npx wrangler versions upload` from the
+  // repo root, so this file tells wrangler what to deploy.
+  "name": "elite-spine-fort-lee",
+  "compatibility_date": "2026-08-04",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page"
+  }
+}
