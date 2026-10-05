@@ -196,11 +196,79 @@ function getGoogleReviews() {
   return out;
 }
 
-// GET handler: ?reviews=1 returns the rating JSON; otherwise a health check.
+// ===================================================================
+// BLOG POSTS  (Google Sheet as CMS)
+// -------------------------------------------------------------------
+// Create a tab named "Blog Posts" in this spreadsheet with row 1:
+//   Slug | Status | Title | Category | Date | Read Time | Hero Image | Excerpt | Body
+// One row per article. Only rows with Status = "Published" go live.
+// Body format (plain text in one cell):
+//   ## Heading line
+//   Paragraph text (blank line between paragraphs)
+//   - list item
+// The site fetches ?posts=1 and renders new posts automatically.
+// Cached 10 minutes — edits appear on the site within ~10 min.
+// ===================================================================
+var BLOG_CACHE_MINUTES = 10;
+
+function getBlogPosts() {
+  var cache = CacheService.getScriptCache();
+  var cached = cache.get('blog_posts');
+  if (cached) return JSON.parse(cached);
+
+  var ss = SPREADSHEET_ID
+    ? SpreadsheetApp.openById(SPREADSHEET_ID)
+    : SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Blog Posts');
+  if (!sheet || sheet.getLastRow() < 2) {
+    return { ok: true, posts: [] };
+  }
+
+  var rows = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getValues();
+  var headers = rows[0].map(function (h) { return String(h).toLowerCase().trim(); });
+  function col(name) { return headers.indexOf(name); }
+  var iSlug = col('slug'), iStatus = col('status'), iTitle = col('title'),
+      iCat = col('category'), iDate = col('date'), iRead = col('read time'),
+      iHero = col('hero image'), iExcerpt = col('excerpt'), iBody = col('body');
+
+  var posts = [];
+  for (var r = 1; r < rows.length; r++) {
+    var row = rows[r];
+    var status = String(row[iStatus] || '').toLowerCase().trim();
+    var slug = String(row[iSlug] || '').toLowerCase().trim()
+      .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-');
+    if (status !== 'published' || !slug || !row[iTitle]) continue;
+    var date = row[iDate];
+    if (date instanceof Date) {
+      date = Utilities.formatDate(date, Session.getScriptTimeZone(), 'MMMM d, yyyy');
+    }
+    posts.push({
+      slug: slug,
+      title: String(row[iTitle]),
+      category: String(row[iCat] || 'From the Clinic'),
+      date: String(date || ''),
+      read: String(row[iRead] || '3 min read'),
+      hero: String(row[iHero] || ''),
+      excerpt: String(row[iExcerpt] || ''),
+      bodyText: String(row[iBody] || '')
+    });
+  }
+
+  var out = { ok: true, posts: posts };
+  cache.put('blog_posts', JSON.stringify(out), BLOG_CACHE_MINUTES * 60);
+  return out;
+}
+
+// GET handler: ?reviews=1 → rating JSON; ?posts=1 → blog posts JSON; else health check.
 function doGet(e) {
   if (e && e.parameter && e.parameter.reviews) {
     return ContentService
       .createTextOutput(JSON.stringify(getGoogleReviews()))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  if (e && e.parameter && e.parameter.posts) {
+    return ContentService
+      .createTextOutput(JSON.stringify(getBlogPosts()))
       .setMimeType(ContentService.MimeType.JSON);
   }
   return ContentService

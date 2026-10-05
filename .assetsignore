@@ -1,0 +1,10 @@
+# Repo housekeeping and docs — kept in git, not served on the public site.
+.git
+.gitignore
+.gitattributes
+.assetsignore
+wrangler.jsonc
+DEPLOY.md
+SHEET-SETUP.md
+google-apps-script
+images-src
