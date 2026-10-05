@@ -415,35 +415,6 @@ button { font: inherit; }
 body.menu-open { overflow: hidden; }
 
 /* ============================================================
-   Mobile sticky CTA bar (sticks to viewport bottom, docks
-   on top of the footer as its own section)
-   ============================================================ */
-.msticky { display: none; }
-@media (max-width: 760px) {
-  .msticky {
-    position: sticky;
-    bottom: 0;
-    z-index: 90;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 12px var(--pad-x) calc(12px + env(safe-area-inset-bottom));
-    background: rgba(6, 16, 31, .92);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border-top: 1px solid var(--line-dark);
-    box-shadow: 0 -14px 34px -18px rgba(0, 0, 0, .7);
-  }
-  .msticky__btn {
-    --bh: 50px;
-    padding: 0 10px;
-    font-size: 12px;
-    letter-spacing: .03em;
-    white-space: nowrap;
-  }
-}
-
-/* ============================================================
    Contact / appointment form band
    ============================================================ */
 .cform {
